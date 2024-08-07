@@ -23,6 +23,6 @@ public class MetodoDePago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idMetodoDePago;
     String TiPoDeCuenta;
-    Integer NCuenta;
+    String NCuenta;
     
 }

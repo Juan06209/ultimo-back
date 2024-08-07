@@ -58,13 +58,24 @@ public class PromocionControler {
     }
     
     @PutMapping("/promociones/{id}")
-    public ResponseEntity<Promocion> ModificarPromocionId(@PathVariable Integer id, @RequestBody Promocion promocionObj) {
-        Promocion promocion = promocionServicio.buscarPromocionPorId(id);
-        if (promocion== null) {
-        }
-        promocionServicio.guardarPromocion(promocion);
-        return ResponseEntity.ok(promocion);
+public ResponseEntity<Promocion> ModificarPromocionId(@PathVariable Integer id, @RequestBody Promocion promocionObj) {
+    // Buscar la promoción por id
+    Promocion promocion = promocionServicio.buscarPromocionPorId(id);
+    
+    // Verificar si la promoción existe
+    if (promocion == null) {
+        return ResponseEntity.notFound().build(); // Retorna un 404 Not Found si la promoción no existe
     }
+
+    // Actualizar el atributo TipoDeDescuento
+    promocion.setTipoDeDescuento(promocionObj.getTipoDeDescuento());
+
+    // Guardar los cambios en la promoción
+    promocionServicio.guardarPromocion(promocion);
+    
+    // Retornar la promoción actualizada con un estado 200 OK
+    return ResponseEntity.ok(promocion);
+}
     
     @DeleteMapping("/promociones/{id}")
     public ResponseEntity<Map<String, Boolean>> EliminarPrendaId(@PathVariable Integer id) {

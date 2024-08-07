@@ -55,12 +55,29 @@ public class FacturaControler {
     }
     
     @PutMapping("/facturas/{id}")
-    public ResponseEntity<Factura> ModificarFacturarId(@PathVariable Integer id, @RequestBody Factura facturaObj) {
+    public ResponseEntity<Factura> modificarFacturaId(@PathVariable Integer id, @RequestBody Factura facturaObj) {
         Factura factura = facturaServicio.buscarFacturaPorId(id);
-        if (factura== null) {
+        if (factura == null) {
+            return ResponseEntity.notFound().build();
         }
-        facturaServicio.guardarFactura(factura);
-        return ResponseEntity.ok(factura);
+        
+        // Actualizar los campos de la factura existente con los valores del objeto recibido
+        factura.setNPrendas(facturaObj.getNPrendas());
+        factura.setTotalPagar(facturaObj.getTotalPagar());
+        factura.setDescuento(facturaObj.getDescuento());
+        factura.setCorreoElectronico(facturaObj.getCorreoElectronico());
+        factura.setDireccion(facturaObj.getDireccion());
+        factura.setFecha(facturaObj.getFecha());
+        factura.setCompra(facturaObj.getCompra());
+        
+        // Guardar la factura actualizada
+        Factura updatedFactura = facturaServicio.guardarFactura(factura);
+        
+        // Registrar la factura actualizada para fines de depuración
+        logger.info("Factura actualizada: " + factura);
+        
+        // Retornar la respuesta
+        return ResponseEntity.ok(updatedFactura);
     }
     
     @DeleteMapping("/facturas/{id}")

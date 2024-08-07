@@ -55,14 +55,21 @@ public class MetodoDePagoControler {
         return ResponseEntity.ok(metodosDePago);
     }
     
-    @PutMapping("/metodoDePago/{id}")
-    public ResponseEntity<MetodoDePago> ModificarMetodoDePagoId(@PathVariable Integer id, @RequestBody MetodoDePago metodosDePagoObj) {
-        MetodoDePago metodosDePago = metodoDePagoServicio.buscarMetodoDePagoPorId(id);
-        if (metodosDePago== null) {
-        }
-        metodoDePagoServicio.guardarMetodoDePago(metodosDePago);
-        return ResponseEntity.ok(metodosDePago);
+   @PutMapping("/metodoDePago/{id}")
+public ResponseEntity<MetodoDePago> ModificarMetodoDePagoId(@PathVariable Integer id, @RequestBody MetodoDePago metodosDePagoObj) {
+    MetodoDePago metodosDePago = metodoDePagoServicio.buscarMetodoDePagoPorId(id);
+
+    if (metodosDePago == null) {
+        return ResponseEntity.notFound().build(); // Retorna un 404 si no se encuentra el método de pago
     }
+
+    // Actualiza los atributos del objeto encontrado con los valores del objeto recibido
+    metodosDePago.setTiPoDeCuenta(metodosDePagoObj.getTiPoDeCuenta());
+    metodosDePago.setNCuenta(metodosDePagoObj.getNCuenta());
+
+    metodoDePagoServicio.guardarMetodoDePago(metodosDePago);
+    return ResponseEntity.ok(metodosDePago); // Retorna el método de pago actualizado
+}
     
     @DeleteMapping("/metodoDePago/{id}")
     public ResponseEntity<Map<String, Boolean>> EliminarMetodoDePagoId(@PathVariable Integer id) {

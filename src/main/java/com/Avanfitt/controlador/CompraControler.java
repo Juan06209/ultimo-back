@@ -20,25 +20,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-/**
-@author Juan
- */
-
 @RestController
 @RequestMapping("Avanfitt")
 @CrossOrigin("http://localhost:3000")
 public class CompraControler {
     
-    private static final Logger logger
-            = LoggerFactory.getLogger(CompraControler.class);
+    private static final Logger logger = LoggerFactory.getLogger(CompraControler.class);
     
     @Autowired
     private ICompraServicio compraServicio;
     
     @GetMapping("/compras")
     public List<Compra> obtenerCompras() {
-        var compras = compraServicio.listarCompras();
-        compras.forEach((compra -> logger.info(compra.toString())));
+        List<Compra> compras = compraServicio.listarCompras();
+        compras.forEach(compra -> logger.info(compra.toString()));
         return compras;
     }
     
@@ -52,6 +47,7 @@ public class CompraControler {
     public ResponseEntity<Compra> consultarCompraId(@PathVariable Integer id) {
         Compra compra = compraServicio.buscarCompraPorId(id);
         if (compra == null) {
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(compra);
     }
@@ -59,23 +55,35 @@ public class CompraControler {
     @PutMapping("/compras/{id}")
     public ResponseEntity<Compra> ModificarCompraId(@PathVariable Integer id, @RequestBody Compra compraObj) {
         Compra compra = compraServicio.buscarCompraPorId(id);
-        if (compra== null) {
+        if (compra == null) {
+            logger.error("Compra no encontrada con ID: " + id);
+            return ResponseEntity.notFound().build();
         }
-        compraServicio.guardarCompra(compra);
-        return ResponseEntity.ok(compra);
+        
+        // Actualiza los campos de la compra existente
+        compra.setCantidad(compraObj.getCantidad());
+        compra.setPrecio(compraObj.getPrecio());
+        compra.setComprador(compraObj.getComprador());
+        compra.setMetododepago(compraObj.getMetododepago());
+        compra.setPromocion(compraObj.getPromocion());
+        
+        logger.info("Compra actualizada: " + compra);
+        
+        Compra updatedCompra = compraServicio.guardarCompra(compra);
+        return ResponseEntity.ok(updatedCompra);
     }
     
     @DeleteMapping("/compras/{id}")
     public ResponseEntity<Map<String, Boolean>> EliminarCompraId(@PathVariable Integer id) {
         Compra compra = compraServicio.buscarCompraPorId(id);
-        if (compra== null) {
+        if (compra == null) {
+            logger.error("Compra no encontrada con ID: " + id);
+            return ResponseEntity.notFound().build();
         }
+        
         compraServicio.eliminarCompra(compra);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
     }
-
-    
-    
 }

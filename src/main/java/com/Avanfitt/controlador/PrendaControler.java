@@ -55,14 +55,29 @@ public class PrendaControler {
         return ResponseEntity.ok(prenda);
     }
     
-    @PutMapping("/Prendas/{id}")
-    public ResponseEntity<Prenda> ModificarPrendaId(@PathVariable Integer id, @RequestBody Prenda prendaObj) {
-        Prenda prenda = prendaServicio.buscarPrendaPorId(id);
-        if (prenda== null) {
-        }
-        prendaServicio.guardarPrenda(prenda);
-        return ResponseEntity.ok(prenda);
+   @PutMapping("/Prendas/{id}")
+public ResponseEntity<Prenda> ModificarPrendaId(@PathVariable Integer id, @RequestBody Prenda prendaObj) {
+    // Buscar la prenda por id
+    Prenda prenda = prendaServicio.buscarPrendaPorId(id);
+    
+    // Verificar si la prenda existe
+    if (prenda == null) {
+        return ResponseEntity.notFound().build(); // Retorna un 404 Not Found si la prenda no existe
     }
+
+    // Actualizar los atributos de la prenda
+    prenda.setDescripcion(prendaObj.getDescripcion());
+    prenda.setPrecio(prendaObj.getPrecio());
+    prenda.setDisponibilidad(prendaObj.getDisponibilidad());
+
+    // Guardar los cambios en la prenda
+    prendaServicio.guardarPrenda(prenda);
+    
+    // Retornar la prenda actualizada con un estado 200 OK
+    return ResponseEntity.ok(prenda);
+}
+    
+    
     
     @DeleteMapping("/Prendas/{id}")
     public ResponseEntity<Map<String, Boolean>> EliminarPrendaId(@PathVariable Integer id) {

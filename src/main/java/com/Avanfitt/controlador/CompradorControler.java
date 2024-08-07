@@ -55,14 +55,30 @@ public class CompradorControler {
     }
     
     @PutMapping("/compradores/{id}")
-    public ResponseEntity<Comprador> ModificarCompradorId(@PathVariable Integer id, @RequestBody Comprador compradorObj) {
+    public ResponseEntity<Comprador> modificarCompradorId(@PathVariable Integer id, @RequestBody Comprador compradorObj) {
         Comprador comprador = compradorServicio.buscarCompradorPorId(id);
-        if (comprador== null) {
+        if (comprador == null) {
+            return ResponseEntity.notFound().build();
         }
-        compradorServicio.guardarComprador(comprador);
-        return ResponseEntity.ok(comprador);
+        
+        // Actualizar los campos del comprador existente con los valores del objeto recibido
+        comprador.setCc(compradorObj.getCc());
+        comprador.setNombre(compradorObj.getNombre());
+        comprador.setContraseña(compradorObj.getContraseña());
+        comprador.setDireccion(compradorObj.getDireccion());
+        comprador.setTEl(compradorObj.getTEl());
+        
+        // Guardar el comprador actualizado
+        Comprador updatedComprador = compradorServicio.guardarComprador(comprador);
+        
+        // Registrar el comprador actualizado para fines de depuración
+        logger.info("Comprador actualizado: " + comprador);
+        
+        // Retornar la respuesta
+        return ResponseEntity.ok(updatedComprador);
     }
-    
+   
+   
     @DeleteMapping("/compradores/{id}")
     public ResponseEntity<Map<String, Boolean>> EliminarCompradorId(@PathVariable Integer id) {
         Comprador comprador = compradorServicio.buscarCompradorPorId(id);

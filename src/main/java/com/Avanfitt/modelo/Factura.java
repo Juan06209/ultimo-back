@@ -14,7 +14,7 @@ import lombok.ToString;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
-import java.math.BigDecimal;
+
 
 /**
 @author Juan
@@ -35,8 +35,8 @@ public class Factura {
     Date Fecha;
     
     Integer NPrendas;
-    BigDecimal Totalgar;
-    BigDecimal Descuento;
+    Integer TotalPagar;
+    Integer Descuento;
     String CorreoElectronico;
     String Direccion;
     

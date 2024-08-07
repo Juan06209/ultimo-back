@@ -25,7 +25,7 @@ public class Prenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idPrenda;
-    String Descricion;
+    String Descripcion;
     Integer Precio;
     String Disponibilidad;
     

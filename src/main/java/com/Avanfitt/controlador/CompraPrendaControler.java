@@ -59,12 +59,25 @@ public class CompraPrendaControler {
     }
     
     @PutMapping("/comprasprenda/{id}")
-    public ResponseEntity<CompraPrenda> ModificarCompraPrendaId(@PathVariable Integer id, @RequestBody CompraPrenda compraPrendaObj) {
+    public ResponseEntity<CompraPrenda> modificarCompraPrendaId(@PathVariable Integer id, @RequestBody CompraPrenda compraPrendaObj) {
         CompraPrenda compraPrenda = compraPrendaServicio.buscarCompraPrendaPorId(id);
-        if (compraPrenda== null) {
+        if (compraPrenda == null) {
+            return ResponseEntity.notFound().build();
         }
-        compraPrendaServicio.guardarCompraPrenda(compraPrenda);
-        return ResponseEntity.ok(compraPrenda);
+        
+        // Actualizar los campos de la compraPrenda existente con los valores del objeto recibido
+        compraPrenda.setCantidad(compraPrendaObj.getCantidad());
+        compraPrenda.setPrenda(compraPrendaObj.getPrenda());
+        compraPrenda.setCompra(compraPrendaObj.getCompra());
+        
+        // Guardar la compraPrenda actualizada
+        CompraPrenda updatedCompraPrenda = compraPrendaServicio.guardarCompraPrenda(compraPrenda);
+        
+        // Registrar la compraPrenda actualizada para fines de depuración
+        logger.info("CompraPrenda actualizada: " + compraPrenda);
+        
+        // Retornar la respuesta
+        return ResponseEntity.ok(updatedCompraPrenda);
     }
     
     @DeleteMapping("/comprasprenda/{id}")
