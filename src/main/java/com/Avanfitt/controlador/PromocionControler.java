@@ -37,11 +37,12 @@ public class PromocionControler {
     private IPromocionServicio promocionServicio;
     
     @GetMapping("/promociones")
-    public List<Promocion> obtenerCompras() {
-        var promociones = promocionServicio.listarPromociones();
-        promociones.forEach((promocion -> logger.info(promocion.toString())));
-        return promociones;
-    }
+public List<Promocion> obtenerPromociones() {
+    var promociones = promocionServicio.listarPromociones();
+    promociones.forEach(promocion -> logger.info("Promocion: " + promocion.toString()));
+    return promociones;
+}
+
     
     @PostMapping("/promociones")
     public Promocion agregarPromocion(@RequestBody Promocion promocion) {

@@ -24,9 +24,9 @@ public class Comprador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer idComprador;
     Integer cc;
-    String Nombre;
-    String Contraseña;
-    String Direccion;
+    String nombre;
+    String contraseña;
+    String direccion;
     String TEl;
     
     

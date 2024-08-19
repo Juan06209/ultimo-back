@@ -65,7 +65,7 @@ public ResponseEntity<MetodoDePago> ModificarMetodoDePagoId(@PathVariable Intege
 
     // Actualiza los atributos del objeto encontrado con los valores del objeto recibido
     metodosDePago.setTiPoDeCuenta(metodosDePagoObj.getTiPoDeCuenta());
-    metodosDePago.setNCuenta(metodosDePagoObj.getNCuenta());
+    metodosDePago.setNcuenta(metodosDePagoObj.getNcuenta());
 
     metodoDePagoServicio.guardarMetodoDePago(metodosDePago);
     return ResponseEntity.ok(metodosDePago); // Retorna el método de pago actualizado

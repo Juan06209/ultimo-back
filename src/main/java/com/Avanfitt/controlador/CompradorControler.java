@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,5 +90,21 @@ public class CompradorControler {
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
     }
+    
+@PostMapping("/login")
+public ResponseEntity<Comprador> login(@RequestBody Map<String, String> loginData) {
+    String nombre = loginData.get("nombre");
+    String contraseña = loginData.get("contraseña");
+
+    List<Comprador> compradores = compradorServicio.listarCompradores();
+    for (Comprador comprador : compradores) {
+        if (comprador.getNombre().equals(nombre) && comprador.getContraseña().equals(contraseña)) {
+            return ResponseEntity.ok(comprador); // Responde con el comprador encontrado
+        }
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 si no hay coincidencia
+}
+
+
     
 }

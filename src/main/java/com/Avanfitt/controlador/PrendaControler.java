@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +42,18 @@ public class PrendaControler {
         return prendas;
     }
     
-    @PostMapping("/Prendas")
-    public Prenda agregarPrenda(@RequestBody Prenda prenda) {
+   @PostMapping("/Prendas")
+public ResponseEntity<Prenda> agregarPrenda(@RequestBody Prenda prenda) {
+    try {
         logger.info("Prenda a agregar: " + prenda);
-        return prendaServicio.guardarPrenda(prenda);
+        Prenda nuevaPrenda = prendaServicio.guardarPrenda(prenda);
+        return ResponseEntity.ok(nuevaPrenda);
+    } catch (Exception e) {
+        logger.error("Error al agregar prenda: " + e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+}
+
     
     @GetMapping("/Prendas/{id}")
     public ResponseEntity<Prenda> consultarPrendaId(@PathVariable Integer id) {

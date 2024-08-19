@@ -1,6 +1,6 @@
-
 package com.Avanfitt.modelo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
-@author Juan
+ * @author Juan
  */
 @Entity
 @Data
@@ -19,9 +19,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Promocion {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer idPromocion;
-    Integer TipoDeDescuento;
+    private Integer idPromocion;
     
+    @Column(name = "tipo_de_descuento")
+    private Integer tipoDeDescuento;
 }

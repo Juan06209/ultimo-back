@@ -28,5 +28,5 @@ public class Prenda {
     String Descripcion;
     Integer Precio;
     String Disponibilidad;
-    
+    String imagen;
 }
